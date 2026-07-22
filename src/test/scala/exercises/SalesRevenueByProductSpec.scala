@@ -9,13 +9,17 @@ import utils.TestInit
 class SalesRevenueByProductSpec extends TestInit {
 
   "Calculo del Ingreso Total de un CSV" should "que tiene informacion sobre ventas" in {
-    val csvUrl = getClass.getResource("/sales.csv")
-    require(csvUrl != null, "sales.csv not found on the test classpath")
+    // Relative to the project root: sbt fixes the working directory of `test`
+    // there regardless of machine or OS, so this needs no absolute path and no
+    // fragile string concatenation (see Main.scala for why this isn't a
+    // classpath resource lookup instead).
+    val salesCsvPath = "src/main/resources/sales.csv"
+    require(new java.io.File(salesCsvPath).exists(), s"$salesCsvPath not found (expected to run from the project root)")
 
     val ventasDf = spark.read
       .option("header", "true")
       .option("inferSchema", "true")
-      .csv(csvUrl.toURI.toString)
+      .csv(salesCsvPath)
 
     val resultado = ProcesoArchivos(ventasDf)(spark)
 
