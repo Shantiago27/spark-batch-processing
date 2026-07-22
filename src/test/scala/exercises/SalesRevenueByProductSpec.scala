@@ -9,10 +9,13 @@ import utils.TestInit
 class SalesRevenueByProductSpec extends TestInit {
 
   "Calculo del Ingreso Total de un CSV" should "que tiene informacion sobre ventas" in {
+    val csvUrl = getClass.getResource("/sales.csv")
+    require(csvUrl != null, "sales.csv not found on the test classpath")
+
     val ventasDf = spark.read
       .option("header", "true")
       .option("inferSchema", "true")
-      .csv("examen/src/test/Resources/examen/ventas.csv")
+      .csv(csvUrl.toURI.toString)
 
     val resultado = ProcesoArchivos(ventasDf)(spark)
 
