@@ -2,11 +2,6 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / scalaVersion := "2.12.20"
 
-// Spark's internal reflection touches JDK-internal packages (e.g. sun.nio.ch)
-// that the module system hides by default from Java 9+. spark-submit's launch
-// scripts add these flags for you; running Spark embedded from sbt does not,
-// so without them SparkContext initialization fails on JDK 17 with
-// java.lang.IllegalAccessError: ... cannot access class sun.nio.ch.DirectBuffer.
 // Forked JVMs otherwise inherit the OS default charset; pin UTF-8 explicitly
 // so accented source literals (á, é, ñ, ...) print correctly on every machine,
 // regardless of its default codepage.
@@ -15,6 +10,11 @@ val utf8ConsoleOpts = Seq(
   "-Dsun.jnu.encoding=UTF-8"
 )
 
+// Spark's internal reflection touches JDK-internal packages (e.g. sun.nio.ch)
+// that the module system hides by default from Java 9+. spark-submit's launch
+// scripts add these flags for you; running Spark embedded from sbt does not,
+// so without them SparkContext initialization fails on JDK 17 with
+// java.lang.IllegalAccessError: ... cannot access class sun.nio.ch.DirectBuffer.
 val sparkJava17Opens = Seq(
   "--add-opens=java.base/java.lang=ALL-UNNAMED",
   "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
