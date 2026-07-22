@@ -31,5 +31,10 @@ class WordCountRddSpec extends TestInit {
 
     val resultado = PalabrasRDD(palabras)(spark)
     resultado.collect().foreach(println)
+
+    val actual = resultado.collect().toMap
+    val esperado = palabras.groupBy(identity).mapValues(_.size).toMap
+    actual shouldBe esperado
+    actual.values.sum shouldBe palabras.size
   }
 }

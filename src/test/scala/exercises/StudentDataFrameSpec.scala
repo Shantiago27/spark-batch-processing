@@ -27,5 +27,16 @@ class StudentDataFrameSpec extends TestInit {
 
     println("Dataframe utilizado")
     estudiantesDF.show(30)
+
+    estudiantesDF.schema.fieldNames should contain theSameElementsInOrderAs Seq("nombre", "edad", "calificacion")
+    estudiantesDF.count() shouldBe 30
+
+    val filtrados = estudiantesFiltro.collect()
+    filtrados should have length 10
+    filtrados.map(_.getAs[Double]("calificacion")).forall(_ > 8.0) shouldBe true
+
+    val primero = orden.head()
+    primero.getAs[String]("nombre") shouldBe "Daniela"
+    primero.getAs[Double]("calificacion") shouldBe 9.4
   }
 }

@@ -33,5 +33,13 @@ class StudentGradesJoinSpec extends TestInit {
     val resultado3 = UnionDataframes(estudiantesDf, calificacionesDf)
     resultado3.show()
 
+    val promedios = resultado3.collect()
+      .map(r => r.getAs[Int]("id") -> r.getAs[Double]("Calificacion Promedio"))
+      .toMap
+
+    // Only students with at least one grade survive the inner join.
+    promedios.keySet shouldBe (1 to 18).toSet
+    promedios(1) shouldBe 8.75 +- 0.001 // (9.5 + 8.0) / 2
+    promedios(17) shouldBe 9.6 +- 0.001 // single grade, no averaging needed
   }
 }

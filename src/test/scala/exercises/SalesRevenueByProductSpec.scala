@@ -22,6 +22,19 @@ class SalesRevenueByProductSpec extends TestInit {
     println("Tabla final de ingresos por producto:")
     resultado.show()
 
+    val porProducto = resultado.collect()
+      .map(r => r.getAs[Int]("id_producto") -> r.getAs[Double]("ingreso_total"))
+      .toMap
+
+    // Cross-check against a total computed independently from the raw rows,
+    // instead of hardcoding every product's revenue.
+    val totalEsperado = ventasDf.collect()
+      .map(r => r.getAs[Int]("cantidad") * r.getAs[Double]("precio_unitario"))
+      .sum
+    porProducto.values.sum shouldBe totalEsperado +- 0.001
+
+    porProducto(101) shouldBe 460.0 +- 0.001
+    porProducto(104) shouldBe 800.0 +- 0.001
   }
 
 }
