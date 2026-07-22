@@ -3,13 +3,15 @@ package utils
 import org.apache.commons.io.FileUtils
 import org.apache.spark.sql.types.{StructField, StructType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
 import java.io.File
 import scala.reflect.io.Directory
 
 
-case class TestInit() extends FlatSpec with Matchers with BeforeAndAfterAll with SparkSessionTestWrapper {
+case class TestInit() extends AnyFlatSpec with Matchers with BeforeAndAfterAll with SparkSessionTestWrapper {
 
   lazy val testPath = "src/test/resources"
 
