@@ -1,0 +1,17 @@
+# sbt / scala build output
+target/
+project/target/
+project/project/
+
+# IDE / build-server metadata (this project targets VS Code + Metals, not IntelliJ)
+.idea/
+.bsp/
+.metals/
+.bloop/
+.vscode/
+metals.sbt
+
+# Spark local metastore / logs left behind by local runs
+metastore_db/
+derby.log
+*.log
